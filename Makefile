@@ -11,7 +11,7 @@ LDFLAGS=-X main.version=${VERSION} \
 LDFLAGS_BUILD=-ldflags "${LDFLAGS}"
 LDFLAGS_RELEASE=-ldflags "-s -w ${LDFLAGS}"
 
-OUTPUT_OBJ=-o build/sx1302
+OUTPUT_OBJ=./build/sx1302
 
 MAIN_GO=./main.go
 
@@ -20,11 +20,11 @@ all: tidy analyze build
 
 .PHONY: build
 build: build_dir
-	go build ${LDFLAGS_BUILD} ${OUTPUT_OBJ} ${MAIN_GO}
+	go build ${LDFLAGS_BUILD} -o ${OUTPUT_OBJ} ${MAIN_GO}
 
 .PHONY: release
 release: clean build_dir analyze
-	go build ${LDFLAGS_RELEASE} ${OUTPUT_OBJ} ${MAIN_GO}
+	go build ${LDFLAGS_RELEASE} -o ${OUTPUT_OBJ} ${MAIN_GO}
 
 .PHONY: test
 test: build_dir tidy analyze
@@ -91,6 +91,11 @@ tools:
 build_dir:
 	mkdir -p ./build/
 
-.PHONY: deploy
-deploy:
-	scp ${OUTPUT_OBJ} pi@lora:~/src/lora/go_sx1302
+.PHONY: remote-build
+remote-build: clean tidy analyze
+	scp -r * pi@lora:~/src/lora/go_sx1302/
+	ssh pi@lora -t "cd ~/src/lora/go_sx1302/ && make remote-build-internal"
+
+.PHONY: remote-build-internal
+remote-build-internal:
+	go build -o ${OUTPUT_OBJ} ${MAIN_GO}
