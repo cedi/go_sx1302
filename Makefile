@@ -13,18 +13,18 @@ LDFLAGS_RELEASE=-ldflags "-s -w ${LDFLAGS}"
 
 OUTPUT_OBJ=./build/sx1302
 
-MAIN_GO=./main.go
+MAIN=./main.go
 
 .PHONY: all
 all: tidy analyze build
 
 .PHONY: build
 build: build_dir
-	go build ${LDFLAGS_BUILD} -o ${OUTPUT_OBJ} ${MAIN_GO}
+	go build ${LDFLAGS_BUILD} -o ${OUTPUT_OBJ} ${MAIN}
 
 .PHONY: release
 release: clean build_dir analyze
-	go build ${LDFLAGS_RELEASE} -o ${OUTPUT_OBJ} ${MAIN_GO}
+	go build ${LDFLAGS_RELEASE} -o ${OUTPUT_OBJ} ${MAIN}
 
 .PHONY: test
 test: build_dir tidy analyze
@@ -98,4 +98,4 @@ remote-build: clean tidy analyze
 
 .PHONY: remote-build-internal
 remote-build-internal:
-	go build -o ${OUTPUT_OBJ} ${MAIN_GO}
+	go build -o ${OUTPUT_OBJ} ${MAIN}
