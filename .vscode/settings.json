@@ -1,0 +1,6 @@
+{
+    "go.toolsEnvVars": {
+        "GOMODCACHE": "/Users/cedi/src/go/pkg/mod",
+        "GOPATH": "/Users/cedi/src/go"
+    }
+}

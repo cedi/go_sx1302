@@ -1,6 +1,6 @@
 package model
 
-// Configuration structure for a RF chain
+// RxRf configures a RF chain
 type RxRf struct {
 	// enable or disable that RF chain
 	Enable bool
@@ -24,7 +24,17 @@ type RxRf struct {
 	SingleInputMode bool
 }
 
-// Configuration structure for an IF chain
+func NewRxRfConf() *RxRf {
+	return &RxRf{
+		Enable:          true,      // rf chain 0 needs to be enabled for calibration to work on sx1257
+		FreqHz:          868500000, // dummy
+		Type:            RadioTypeSX1250,
+		TxEnable:        false,
+		SingleInputMode: false,
+	}
+}
+
+// RxIf configures an IF chain
 type RxIf struct {
 	// enable or disable that IF chain
 	Enable bool
@@ -60,13 +70,13 @@ type RxIf struct {
 	ImplicitCoderate uint8
 }
 
-// Configuration structure for LoRa/FSK demodulators
+// Demod configures the structure for LoRa/FSK demodulators
 type Demod struct {
-	// bitmask to enable spreading-factors for correlators (SF12 - SF5)
+	// MultisfDatarate is the bitmask to enable spreading-factors for correlators (SF12 - SF5)
 	MultisfDatarate uint8
 }
 
-// Structure containing all gains of Tx chain
+// TXGain contains all gains of a Tx chain
 type TXGain struct {
 	// measured TX power at the board connector, in dBm
 	RfPower int8
@@ -93,6 +103,7 @@ type TXGain struct {
 	PwrIdx uint8
 }
 
+// NewTxGainWithDefaults creates a new TXGain object with default config
 func NewTxGainWithDefaults() TXGain {
 	return TXGain{
 		RfPower: 14,
@@ -106,19 +117,20 @@ func NewTxGainWithDefaults() TXGain {
 	}
 }
 
-// Structure defining the Tx gain LUT
+// TxGainLUT defines the Tx gain LUT
 type TxGainLUT struct {
 	// Array of Tx gain struct
 	LUT []TXGain
 }
 
+// NewTxGainLUTWithDefaults creates a new TxGainLUT object with defaults
 func NewTxGainLUTWithDefaults() TxGainLUT {
 	return TxGainLUT{
 		LUT: []TXGain{NewTxGainWithDefaults()},
 	}
 }
 
-// Structure containing a Listen-Before-Talk channel configuration
+// LBTChanConf contains a Listen-Before-Talk channel configuration
 type LBTChanConf struct {
 	// LBT channel frequency
 	FreqHz uint32
@@ -133,7 +145,7 @@ type LBTChanConf struct {
 	TransmitTimeMs uint16
 }
 
-// Configuration structure for listen-before-talk
+// LBTConf configures listen-before-talk
 type LBTConf struct {
 	// enable or disable LBT
 	Enable bool
